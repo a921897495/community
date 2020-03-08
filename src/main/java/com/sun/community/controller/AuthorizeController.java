@@ -2,6 +2,8 @@ package com.sun.community.controller;
 
 import com.sun.community.dto.AccessTokenDTO;
 import com.sun.community.dto.GithubUser;
+import com.sun.community.mapper.UserMapper;
+import com.sun.community.model.User;
 import com.sun.community.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,12 +12,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 @Controller
 public class AuthorizeController {
 
     @Autowired
     private GithubProvider githubProvider;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Value("${github.client.id}")
     private String clientID;
@@ -41,6 +47,13 @@ public class AuthorizeController {
         GithubUser githubUser = githubProvider.getUser(accessToken);
 
         if (githubUser!=null){
+            User user = new User();
+            user.setToken(UUID.randomUUID().toString());
+            user.setName(githubUser.getName());
+            user.setAccountId(String.valueOf(githubUser.getId()));
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+            userMapper.insert(user);
             //登陆成功，写cookie和session
             request.getSession().setAttribute("user",githubUser);
             return "redirect:/";
