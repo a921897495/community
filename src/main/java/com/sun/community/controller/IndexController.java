@@ -1,6 +1,7 @@
 package com.sun.community.controller;
 
 
+import com.sun.community.dto.PaginationDTO;
 import com.sun.community.dto.QuestionDTO;
 import com.sun.community.mapper.QuestionMapper;
 import com.sun.community.mapper.UserMapper;
@@ -29,7 +30,9 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request,
-                        Model model){
+                        Model model,
+                        @RequestParam(name = "page",defaultValue = "1") Integer page,
+                        @RequestParam(name = "size",defaultValue = "10") Integer size){
 
         Cookie[] cookies=request.getCookies();
         if (cookies !=null && cookies.length!=0){
@@ -46,8 +49,8 @@ public class IndexController {
             }
         }
 
-        List<QuestionDTO> questionList=questionService.list();
-        model.addAttribute("question",questionList);
+        PaginationDTO pagination=questionService.list(page,size);
+        model.addAttribute("pagination",pagination);
 
         return "index";
     }
