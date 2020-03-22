@@ -17,13 +17,13 @@ public interface QuestionMapper {
     @Select("select * from table_question limit #{offset},#{size}")
     List<Question> list(@Param(value = "offset") Integer offset, @Param(value = "size")Integer size);
 
-    @Select("select count(1) from table_question")
+    @Select("select count(*) from table_question")
     Integer count();
 
     @Select("select * from table_question where creator=#{userId} limit #{offset},#{size}")
     List<Question> listByUserId(@Param("userId") Integer userId, @Param(value = "offset") Integer offset, @Param(value = "size")Integer size);
 
-    @Select("select count(1) from table_question where creator=#{userId}")
+    @Select("select count(*) from table_question where creator=#{userId}")
     Integer countByUserId(@Param("userId")Integer userId);
 
     @Select("select * from table_question where id=#{id}")
