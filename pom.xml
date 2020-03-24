@@ -46,6 +46,21 @@
             </exclusions>
         </dependency>
 
+        <!--devtools热部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <scope>true</scope>
+        </dependency>
+
+        <!--mybatis https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/index.html-->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
         <!--okhttp-->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -74,14 +89,6 @@
             <version>5.1.45</version>
         </dependency>
 
-
-        <!--mybatis https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/index.html-->
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>2.1.1</version>
-        </dependency>
-
         <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -89,19 +96,30 @@
             <version>1.18.12</version>
         </dependency>
 
-        <!--devtools热部署-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-            <scope>true</scope>
-        </dependency>
+
 
 
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.45</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
 
         </plugins>
     </build>
