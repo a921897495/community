@@ -2,6 +2,8 @@ package com.sun.community.service;
 
 import com.sun.community.dto.PaginationDTO;
 import com.sun.community.dto.QuestionDTO;
+import com.sun.community.exception.CustomizeErrorCode;
+import com.sun.community.exception.CustomizeException;
 import com.sun.community.mapper.QuestionMapper;
 import com.sun.community.mapper.UserMapper;
 import com.sun.community.model.Question;
@@ -123,6 +125,9 @@ public class QuestionService {
     public QuestionDTO getById(Integer id) {
 
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question==null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_ONT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -149,7 +154,10 @@ public class QuestionService {
             QuestionExample questionExample=new QuestionExample();
             questionExample.createCriteria()
                     .andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion,questionExample);
+            int updated=questionMapper.updateByExampleSelective(updateQuestion,questionExample);
+            if (updated!=1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_ONT_FOUND);
+            }
         }
     }
 }
