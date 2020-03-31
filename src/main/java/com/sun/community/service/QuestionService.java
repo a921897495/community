@@ -4,6 +4,7 @@ import com.sun.community.dto.PaginationDTO;
 import com.sun.community.dto.QuestionDTO;
 import com.sun.community.exception.CustomizeErrorCode;
 import com.sun.community.exception.CustomizeException;
+import com.sun.community.mapper.QuestionExtMapper;
 import com.sun.community.mapper.QuestionMapper;
 import com.sun.community.mapper.UserMapper;
 import com.sun.community.model.Question;
@@ -25,6 +26,9 @@ public class QuestionService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    QuestionExtMapper questionExtMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
 
@@ -159,5 +163,13 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_ONT_FOUND);
             }
         }
+    }
+
+    public void incView(Integer id) {
+
+        Question question=new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }
