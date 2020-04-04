@@ -26,4 +26,11 @@
     where id=#{id}
   </update>
 
+  <update id="incCommentCount" parameterType="com.sun.community.model.Question">
+    update table_question
+    set
+     comment_count= comment_count+ #{commentCount,jdbcType=INTEGER}
+    where id=#{id}
+  </update>
+
 </mapper>
