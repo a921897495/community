@@ -1,4 +1,8 @@
 /**
+ * Created by codedrinker on 2019/6/1.
+ */
+
+/**
  * 提交回复
  */
 function post() {
@@ -9,7 +13,7 @@ function post() {
 
 function comment2target(targetId, type, content) {
     if (!content) {
-        alert("不能回复空内容！");
+        alert("不能回复空内容~~~");
         return;
     }
 
