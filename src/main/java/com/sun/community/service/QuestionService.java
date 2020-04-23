@@ -152,7 +152,6 @@ public class QuestionService {
             questionMapper.insert(question);
         } else {
             //更新
-            question.setGmtModified(question.getGmtCreate());
             Question updateQuestion = new Question();
             updateQuestion.setGmtModified(System.currentTimeMillis());
             updateQuestion.setTitle(question.getTitle());

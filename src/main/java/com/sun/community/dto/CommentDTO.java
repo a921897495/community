@@ -1,7 +1,13 @@
 package com.sun.community.dto;
 
+import com.sun.community.model.User;
 import lombok.Data;
 
+/**
+ * @author SunTong
+ * @date 2020/4/23 15:56
+ * @desc
+ */
 @Data
 public class CommentDTO {
 
@@ -15,5 +21,7 @@ public class CommentDTO {
     private Integer commentCount;
     private String content;
 
-}
+    private User user;
 
+
+}
