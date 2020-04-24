@@ -1,11 +1,13 @@
 package com.sun.community.service;
 
 import com.sun.community.dto.CommentDTO;
+import com.sun.community.exception.CustomizeErrorCode;
+import com.sun.community.exception.CustomizeException;
 import com.sun.community.enums.CommentTypeEnum;
 import com.sun.community.enums.NotificationStatusEnum;
 import com.sun.community.enums.NotificationTypeEnum;
-import com.sun.community.exception.CustomizeErrorCode;
-import com.sun.community.exception.CustomizeException;
+import com.sun.community.mapper.*;
+import com.sun.community.model.*;
 import com.sun.community.mapper.*;
 import com.sun.community.model.*;
 import org.springframework.beans.BeanUtils;
@@ -20,9 +22,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * @author SunTong
- * @date 2020/4/5 2:43
- * @desc
+ * Created by codedrinker on 2019/5/31.
  */
 @Service
 public class CommentService {
@@ -44,8 +44,6 @@ public class CommentService {
 
     @Autowired
     private NotificationMapper notificationMapper;
-
-
 
     @Transactional
     public void insert(Comment comment, User commentator) {
@@ -73,7 +71,7 @@ public class CommentService {
             // 增加评论数
             Comment parentComment = new Comment();
             parentComment.setId(comment.getParentId());
-            parentComment.setCommentCount(1L);
+            parentComment.setCommentCount(1);
             commentExtMapper.incCommentCount(parentComment);
 
             // 创建通知
@@ -84,7 +82,7 @@ public class CommentService {
             if (question == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
-            comment.setCommentCount(0L);
+            comment.setCommentCount(0);
             commentMapper.insert(comment);
             question.setCommentCount(1);
             questionExtMapper.incCommentCount(question);
@@ -111,29 +109,31 @@ public class CommentService {
     }
 
     public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum type) {
-        CommentExample commentExample=new CommentExample();
+        CommentExample commentExample = new CommentExample();
         commentExample.createCriteria()
                 .andParentIdEqualTo(id)
                 .andTypeEqualTo(type.getType());
         commentExample.setOrderByClause("gmt_create desc");
         List<Comment> comments = commentMapper.selectByExample(commentExample);
 
-        if (comments.size()==0){
+        if (comments.size() == 0) {
             return new ArrayList<>();
         }
-        //获取去重的评论人
+        // 获取去重的评论人
         Set<Long> commentators = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());
-        List<Long> userIds=new ArrayList();
+        List<Long> userIds = new ArrayList();
         userIds.addAll(commentators);
 
-        //获取评论人并转换未map
-        UserExample userExample=new UserExample();
+
+        // 获取评论人并转换为 Map
+        UserExample userExample = new UserExample();
         userExample.createCriteria()
                 .andIdIn(userIds);
         List<User> users = userMapper.selectByExample(userExample);
         Map<Long, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));
 
-        //转换comment未commentDTO
+
+        // 转换 comment 为 commentDTO
         List<CommentDTO> commentDTOS = comments.stream().map(comment -> {
             CommentDTO commentDTO = new CommentDTO();
             BeanUtils.copyProperties(comment, commentDTO);

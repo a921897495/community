@@ -4,13 +4,10 @@ import com.sun.community.model.User;
 import lombok.Data;
 
 /**
- * @author SunTong
- * @date 2020/4/23 15:56
- * @desc
+ * Created by codedrinker on 2019/6/2.
  */
 @Data
 public class CommentDTO {
-
     private Long id;
     private Long parentId;
     private Integer type;
@@ -18,9 +15,7 @@ public class CommentDTO {
     private Long gmtCreate;
     private Long gmtModified;
     private Long likeCount;
-    private Long commentCount;
+    private Integer commentCount;
     private String content;
-
     private User user;
-
 }

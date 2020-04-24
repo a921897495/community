@@ -1,10 +1,9 @@
 package com.sun.community.advice;
 
-
 import com.alibaba.fastjson.JSON;
-import com.sun.community.dto.ResultDTO;
 import com.sun.community.exception.CustomizeErrorCode;
 import com.sun.community.exception.CustomizeException;
+import com.sun.community.dto.ResultDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,7 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-
+/**
+ * Created by codedrinker on 2019/5/28.
+ */
 @ControllerAdvice
 @Slf4j
 public class CustomizeExceptionHandler {

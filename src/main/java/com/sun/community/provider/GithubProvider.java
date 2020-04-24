@@ -7,7 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+/**
+ * Created by codedrinker on 2019/4/24.
+ */
 @Component
 @Slf4j
 public class GithubProvider {
@@ -48,4 +50,3 @@ public class GithubProvider {
     }
 
 }
-

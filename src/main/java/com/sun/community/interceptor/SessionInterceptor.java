@@ -4,9 +4,11 @@ import com.sun.community.enums.AdPosEnum;
 import com.sun.community.mapper.UserMapper;
 import com.sun.community.model.User;
 import com.sun.community.model.UserExample;
+import com.sun.community.service.AdService;
 import com.sun.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * Created by codedrinker on 2019/5/16.
+ */
 @Service
 public class SessionInterceptor implements HandlerInterceptor {
 
@@ -24,6 +29,8 @@ public class SessionInterceptor implements HandlerInterceptor {
     private UserMapper userMapper;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private AdService adService;
 
     @Value("${github.redirect.uri}")
     private String redirectUri;
@@ -33,6 +40,9 @@ public class SessionInterceptor implements HandlerInterceptor {
         //设置 context 级别的属性
         request.getServletContext().setAttribute("redirectUri", redirectUri);
         // 没有登录的时候也可以查看导航
+        for (AdPosEnum adPos : AdPosEnum.values()) {
+            request.getServletContext().setAttribute(adPos.name(), adService.list(adPos.name()));
+        }
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0)
             for (Cookie cookie : cookies) {
@@ -55,12 +65,12 @@ public class SessionInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
 
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
 
     }
 }

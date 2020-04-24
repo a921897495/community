@@ -2,7 +2,9 @@ package com.sun.community.dto;
 
 import lombok.Data;
 
-
+/**
+ * Created by codedrinker on 2019/8/2.
+ */
 @Data
 public class HotTagDTO implements Comparable {
     private String name;

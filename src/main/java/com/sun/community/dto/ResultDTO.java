@@ -5,9 +5,7 @@ import com.sun.community.exception.CustomizeException;
 import lombok.Data;
 
 /**
- * @author SunTong
- * @date 2020/4/5 2:32
- * @desc
+ * Created by codedrinker on 2019/5/31.
  */
 @Data
 public class ResultDTO<T> {

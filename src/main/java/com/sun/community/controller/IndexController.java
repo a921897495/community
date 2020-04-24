@@ -1,6 +1,5 @@
 package com.sun.community.controller;
 
-
 import com.sun.community.cache.HotTagCache;
 import com.sun.community.dto.PaginationDTO;
 import com.sun.community.service.QuestionService;
@@ -10,9 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * Created by codedrinker on 2019/4/24.
+ */
 @Controller
 public class IndexController {
 

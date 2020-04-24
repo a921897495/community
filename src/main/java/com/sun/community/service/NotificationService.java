@@ -1,11 +1,11 @@
 package com.sun.community.service;
 
+import com.sun.community.exception.CustomizeErrorCode;
+import com.sun.community.exception.CustomizeException;
 import com.sun.community.dto.NotificationDTO;
 import com.sun.community.dto.PaginationDTO;
 import com.sun.community.enums.NotificationStatusEnum;
 import com.sun.community.enums.NotificationTypeEnum;
-import com.sun.community.exception.CustomizeErrorCode;
-import com.sun.community.exception.CustomizeException;
 import com.sun.community.mapper.NotificationMapper;
 import com.sun.community.model.Notification;
 import com.sun.community.model.NotificationExample;
@@ -19,7 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
+/**
+ * Created by codedrinker on 2019/6/14.
+ */
 @Service
 public class NotificationService {
 

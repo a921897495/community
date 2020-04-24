@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Created by codedrinker on 2019/5/15.
+ */
 @Controller
 public class ProfileController {
     @Autowired

@@ -2,7 +2,6 @@ package com.sun.community.controller;
 
 import com.sun.community.dto.AccessTokenDTO;
 import com.sun.community.dto.GithubUser;
-import com.sun.community.mapper.UserMapper;
 import com.sun.community.model.User;
 import com.sun.community.provider.GithubProvider;
 import com.sun.community.service.UserService;
@@ -18,6 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
+/**
+ * Created by codedrinker on 2019/4/24.
+ */
 @Controller
 @Slf4j
 public class AuthorizeController {
@@ -78,4 +80,3 @@ public class AuthorizeController {
         return "redirect:/";
     }
 }
-
