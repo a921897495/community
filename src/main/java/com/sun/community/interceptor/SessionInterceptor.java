@@ -1,10 +1,12 @@
 package com.sun.community.interceptor;
 
+import com.sun.community.enums.AdPosEnum;
 import com.sun.community.mapper.UserMapper;
 import com.sun.community.model.User;
 import com.sun.community.model.UserExample;
 import com.sun.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,34 +22,35 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private NotificationService notificationService;
 
+    @Value("${github.redirect.uri}")
+    private String redirectUri;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-        Cookie[] cookies=request.getCookies();
-        if (cookies !=null && cookies.length!=0){
-            for (Cookie cookie:cookies){
-                if (cookie.getName().equals("token")){
-                    String token=cookie.getValue();
-                    UserExample userExample=new UserExample();
+        //设置 context 级别的属性
+        request.getServletContext().setAttribute("redirectUri", redirectUri);
+        // 没有登录的时候也可以查看导航
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null && cookies.length != 0)
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    UserExample userExample = new UserExample();
                     userExample.createCriteria()
                             .andTokenEqualTo(token);
-                    List<User> users=userMapper.selectByExample(userExample);
-                    if (users.size()!=0){
+                    List<User> users = userMapper.selectByExample(userExample);
+                    if (users.size() != 0) {
                         HttpSession session = request.getSession();
-                        request.getSession().setAttribute("user",users.get(0));
+                        session.setAttribute("user", users.get(0));
                         Long unreadCount = notificationService.unreadCount(users.get(0).getId());
                         session.setAttribute("unreadCount", unreadCount);
                     }
                     break;
                 }
-
             }
-        }
-
         return true;
     }
 
