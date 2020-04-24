@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.sun.community.dto.ResultDTO;
 import com.sun.community.exception.CustomizeErrorCode;
 import com.sun.community.exception.CustomizeException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,21 +18,19 @@ import java.io.PrintWriter;
 
 
 @ControllerAdvice
+@Slf4j
 public class CustomizeExceptionHandler {
-
     @ExceptionHandler(Exception.class)
-    Object handle(Throwable ex, Model model,
-                  HttpServletRequest request,
-                  HttpServletResponse response) {
-
+    ModelAndView handle(Throwable e, Model model, HttpServletRequest request, HttpServletResponse response) {
         String contentType = request.getContentType();
         if ("application/json".equals(contentType)) {
             ResultDTO resultDTO;
-            //返回json
-            if (ex instanceof CustomizeException) {
-                resultDTO= (ResultDTO) ResultDTO.errorOf((CustomizeException)ex);
+            // 返回 JSON
+            if (e instanceof CustomizeException) {
+                resultDTO = ResultDTO.errorOf((CustomizeException) e);
             } else {
-                resultDTO= ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
+                log.error("handle error", e);
+                resultDTO = ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
             }
             try {
                 response.setContentType("application/json");
@@ -40,19 +39,18 @@ public class CustomizeExceptionHandler {
                 PrintWriter writer = response.getWriter();
                 writer.write(JSON.toJSONString(resultDTO));
                 writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ioe) {
             }
-return null;
+            return null;
         } else {
-            //错误页面跳转
-            if (ex instanceof CustomizeException) {
-                model.addAttribute("message", ex.getMessage());
+            // 错误页面跳转
+            if (e instanceof CustomizeException) {
+                model.addAttribute("message", e.getMessage());
             } else {
-                model.addAttribute("message",CustomizeErrorCode.SYS_ERROR.getMessage());
+                log.error("handle error", e);
+                model.addAttribute("message", CustomizeErrorCode.SYS_ERROR.getMessage());
             }
             return new ModelAndView("error");
         }
     }
-
 }
